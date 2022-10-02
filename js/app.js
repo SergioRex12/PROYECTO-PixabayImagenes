@@ -19,20 +19,24 @@ function verificarBusqueda(e) {
     buscarImg();
 }
 
-function buscarImg() {
+async function buscarImg() {
 
     const foto = document.querySelector('#termino').value;
 
     const url = `https://pixabay.com/api/?key=29998498-8a4342bdb6695b39f6ac3b3a9&per_page=${registrosPorPagina}&image_type=photo&q=${foto}&page=${paginaActual}`;
     
-    fetch(url)
-        .then(resultado => resultado.json())
-        .then(resultado => {
-            totalPaginas = calcularPaginas(resultado.totalHits);
-            
-            insertarBusqueda(resultado.hits)
+    try {
+        const busqueda = await fetch(url);
+        const resultado = await busqueda.json();
 
-        })
+        totalPaginas = calcularPaginas(resultado.totalHits);
+            
+        insertarBusqueda(resultado.hits)
+        
+    } catch (error) {
+        console.log(error);
+    }
+
 
 }
 
